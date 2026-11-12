@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="es" data-modo="tituladora">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tituladora de Proyectos de Investigación — UNASAM</title>
+    <style>
+        :root{
+            --navy:#0F2A44;
+            --navy-2:#1B3A5C;
+            --accent:#2F5D8A;
+            --gold:#B9975B;
+            --bg:#EEF1F5;
+            --panel:#FFFFFF;
+            --border:#CBD5E1;
+            --border-dark:#94A3B8;
+            --text:#1F2937;
+            --muted:#5B6B82;
+            --light:#F7F9FB;
+        }
+        *{box-sizing:border-box;}
+        body{
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color:var(--bg);
+            color:var(--text);
+            margin:0;
+            padding:0;
+            min-height:100vh;
+        }
+
+        /* ===== ENCABEZADO ===== */
+        .app-header{
+            background:linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 70%, #244A73 100%);
+            color:#fff;
+            border-bottom:4px solid var(--gold);
+            padding:26px 20px;
+        }
+        .header-inner{
+            max-width:980px;
+            margin:0 auto;
+            display:flex;
+            align-items:center;
+            gap:18px;
+        }
+        .header-icon{
+            flex:0 0 64px;
+            width:64px;height:64px;
+            border:1px solid rgba(255,255,255,.45);
+            border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            background:rgba(255,255,255,.08);
+        }
+        .header-icon svg{width:34px;height:34px;fill:#fff;}
+        .app-header h1{
+            font-family:Georgia,'Times New Roman',serif;
+            font-size:26px;
+            line-height:1.2;
+            margin:0 0 6px 0;
+            font-weight:700;
+            letter-spacing:.2px;
+        }
+        .app-header p{
+            margin:0;
+            font-size:13px;
+            letter-spacing:1.2px;
+            text-transform:uppercase;
+            color:#D6DEE8;
+        }
+
+        /* ===== CONTENEDOR ===== */
+        .container{
+            background:var(--panel);
+            margin:24px auto 40px auto;
+            width:calc(100% - 32px);
+            max-width:980px;
+            border:1px solid var(--border);
+            border-top:4px solid var(--navy);
+            border-radius:6px;
+            box-shadow:0 8px 24px rgba(15,42,68,.10);
+            overflow:hidden;
+        }
+
+        /* ===== NAVEGACIÓN POR PASOS ===== */
+        .steps-nav{
+            display:flex;
+            gap:8px;
+            padding:16px 20px;
+            background:var(--light);
+            border-bottom:1px solid var(--border);
+            flex-wrap:wrap;
+        }
+        .step-tab{
+            flex:1 1 160px;
+            display:flex;
+            align-items:center;
+            gap:10px;
+            padding:10px 12px;
+            background:#fff;
+            border:1px solid var(--border);
+            border-radius:6px;
+            cursor:pointer;
+            text-align:left;
+            font-family:inherit;
+            transition:border-color .2s, background .2s, box-shadow .2s;
+        }
+        .step-tab:hover{border-color:var(--accent);}
+        .step-tab.active{
+            border-color:var(--navy);
+            background:#EAF0F7;
+            box-shadow:0 0 0 1px var(--navy) inset;
+        }
+        .step-tab.completed{background:#F1F5F9;}
+        .step-number{
+            flex:0 0 30px;
+            width:30px;height:30px;
+            border-radius:50%;
+            background:#E2E8F0;
+            color:var(--navy);
+            border:1px solid var(--border-dark);
+            display:flex;align-items:center;justify-content:center;
+            font-weight:700;font-size:13px;
+        }
+        .step-tab.active .step-number{background:var(--navy);color:#fff;border-color:var(--navy);}
+        .step-tab.completed .step-number{background:var(--accent);color:#fff;border-color:var(--accent);}
+        .step-label{font-size:13px;font-weight:700;color:var(--navy);line-height:1.2;}
+        .step-sub{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px;}
+
+        /* ===== PANELES DE PASOS ===== */
+        .step-panel{display:none;padding:24px 24px 20px 24px;}
+        .step-panel.active{display:block;animation:fadeIn .25s ease;}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+        .section-title{
+            font-family:Georgia,'Times New Roman',serif;
+            font-size:16px;
+            color:var(--navy);
+            border-bottom:2px solid var(--gold);
+            padding-bottom:8px;
+            margin:0 0 18px 0;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:.6px;
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+        .section-icon{
+            flex:0 0 34px;
+            width:34px;height:34px;
+            border-radius:50%;
+            background:var(--navy);
+            display:flex;align-items:center;justify-content:center;
+        }
+        .section-icon svg{width:18px;height:18px;fill:#fff;}
+
+        .grid-row{
+            display:grid;
+            grid-template-columns:220px 1fr;
+            gap:12px;
+            margin-bottom:14px;
+            align-items:center;
+        }
+        label{
+            color:var(--navy-2);
+            font-weight:700;
+            font-size:13px;
+        }
+        input, select{
+            width:100%;
+            padding:10px 12px;
+            border:1px solid var(--border-dark);
+            border-radius:4px;
+            box-sizing:border-box;
+            font-size:14px;
+            font-family:inherit;
+            color:var(--text);
+            background:#fff;
+            outline:none;
+            transition:border-color .2s, box-shadow .2s;
+        }
+        input:focus, select:focus{
+            border-color:var(--navy);
+            box-shadow:0 0 0 3px rgba(15,42,68,.12);
+        }
+        input::placeholder{color:#94A3B8;}
+
+        .dim-container{display:flex;flex-direction:column;gap:8px;}
+        .dim-item{display:flex;gap:8px;}
+        .dim-item input{flex:1;}
+
+        .btn-add, .btn-remove{
+            padding:8px 14px;
+            border-radius:4px;
+            font-size:13px;
+            font-weight:700;
+            cursor:pointer;
+            font-family:inherit;
+            transition:background .2s, color .2s, border-color .2s;
+        }
+        .btn-add{
+            background:#fff;
+            color:var(--navy);
+            border:1px solid var(--navy);
+            align-self:flex-start;
+        }
+        .btn-add:hover{background:var(--navy);color:#fff;}
+        .btn-remove{
+            background:#F8FAFC;
+            color:#991B1B;
+            border:1px solid #CBD5E1;
+            flex:0 0 38px;
+        }
+        .btn-remove:hover{background:#991B1B;color:#fff;border-color:#991B1B;}
+
+        .step-actions{
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+            margin-top:22px;
+            padding-top:16px;
+            border-top:1px solid var(--border);
+            flex-wrap:wrap;
+        }
+        .btn-nav{
+            padding:10px 18px;
+            border-radius:4px;
+            font-size:14px;
+            font-weight:700;
+            cursor:pointer;
+            font-family:inherit;
+            transition:background .2s, color .2s;
+        }
+        .btn-prev{background:#fff;color:var(--navy);border:1px solid var(--border-dark);}
+        .btn-prev:hover{background:var(--light);}
+        .btn-next{background:var(--navy);color:#fff;border:1px solid var(--navy);}
+        .btn-next:hover{background:var(--navy-2);}
+        .btn-spacer{flex:1;}
+
+        button.btn-main{
+            width:100%;
+            padding:14px;
+            background:var(--navy);
+            color:#fff;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+            font-size:15px;
+            font-weight:700;
+            letter-spacing:.4px;
+            text-transform:uppercase;
+            margin-top:6px;
+            transition:background .2s, box-shadow .2s;
+            box-shadow:0 4px 12px rgba(15,42,68,.18);
+        }
+        button.btn-main:hover{background:var(--navy-2);}
+
+        .validation-box{
+            margin:0 24px 16px 24px;
+            padding:12px 14px;
+            border-radius:4px;
+            font-size:13px;
+            display:none;
+            line-height:1.5;
+        }
+        .validation-warning{background:#FFFBEB;color:#92400E;border:1px solid #FDE68A;}
+        .validation-success{background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;}
+
+        .result{
+            margin:0 24px 24px 24px;
+            padding:20px;
+            background:var(--light);
+            border-radius:4px;
+            font-size:14px;
+            color:var(--text);
+            line-height:1.6;
+            border:1px solid var(--border);
+            border-left:4px solid var(--navy);
+        }
+        .result h3{
+            margin:0 0 10px 0;
+            color:var(--navy);
+            font-family:Georgia,'Times New Roman',serif;
+            font-size:19px;
+            text-align:center;
+        }
+        .block-result{
+            margin-bottom:14px;
+            background:#fff;
+            padding:14px 16px;
+            border-radius:4px;
+            border:1px solid var(--border);
+            border-left:4px solid var(--navy);
+        }
+        .block-result h4{
+            margin:0 0 8px 0;
+            color:var(--navy);
+            font-size:14px;
+            text-transform:uppercase;
+            letter-spacing:.4px;
+        }
+        .block-result ul{margin:0;padding-left:20px;}
+        .block-result li{margin-bottom:4px;}
+
+        .matriz-table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:12px;
+            background:#fff;
+            font-size:12px;
+        }
+        .matriz-table th, .matriz-table td{
+            border:1px solid var(--border-dark);
+            padding:8px;
+            vertical-align:top;
+            text-align:left;
+        }
+        .matriz-table th{
+            background:var(--navy);
+            color:#fff;
+            text-transform:uppercase;
+            font-size:11px;
+            text-align:center;
+            letter-spacing:.4px;
+        }
+        .matriz-table tr:nth-child(even) td{background:#F8FAFC;}
+
+        .export-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+        .btn-export{
+            flex:1;
+            min-width:150px;
+            padding:11px;
+            border:none;
+            border-radius:4px;
+            color:#fff;
+            font-size:13px;
+            font-weight:700;
+            cursor:pointer;
+            text-align:center;
+            font-family:inherit;
+            letter-spacing:.3px;
+            transition:background .2s;
+        }
+        .btn-copy{background:#5B6B82;}
+        .btn-copy:hover{background:#475569;}
+        .btn-word{background:var(--navy-2);}
+        .btn-word:hover{background:var(--navy);}
+        .btn-pdf{background:#7F1D2E;}
+        .btn-pdf:hover{background:#5F1622;}
+
+        @media (max-width:640px){
+            .app-header h1{font-size:20px;}
+            .header-inner{gap:12px;}
+            .header-icon{flex-basis:52px;width:52px;height:52px;}
+            .grid-row{grid-template-columns:1fr;gap:6px;}
+            .step-panel{padding:18px 16px;}
+            .result{margin:0 16px 16px 16px;}
+            .validation-box{margin:0 16px 16px 16px;}
+            .step-label{font-size:12px;}
+            .step-sub{display:none;}
+        }
+
+        .header-badge{display:inline-block;margin-top:10px;padding:5px 12px;border:1px solid var(--gold);border-radius:20px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#FDE68A;background:rgba(185,151,91,.15);}
+        .app-footer{max-width:980px;margin:0 auto 30px auto;padding:0 20px;text-align:center;color:var(--muted);font-size:12px;line-height:1.6;}
+        .app-footer strong{color:var(--navy);}
+        .var-extra-block{border:1px solid var(--border);border-left:4px solid var(--accent);background:var(--light);padding:14px 14px 6px 14px;border-radius:4px;margin-bottom:14px;}
+        #bloqueV3{border:1px solid var(--border);border-left:4px solid var(--accent);background:#fff;padding:14px 14px 6px 14px;border-radius:4px;margin-bottom:14px;}
+
+        @media print{
+            body *{visibility:hidden;}
+            #contenidoReporte, #contenidoReporte *{visibility:visible;}
+            #contenidoReporte{position:absolute;left:0;top:0;width:100%;}
+            .export-actions{display:none;}
+            .app-header, .steps-nav, .step-panel, .validation-box, .result{border:none;}
+            .app-header, .steps-nav, .step-panel, .app-footer{display:none;}
+        }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-inner">
+            <div class="header-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3L1 9l4.5 2.45v4.55H7V12.5l5 2.72 5-2.72V16h1.5v-4.55L23 9 12 3zm-5.5 9.5L12 15l5.5-2.5V14L12 16.5 6.5 14v-1.5z"/></svg>
+            </div>
+            <div>
+                <h1>Tituladora de Proyectos de Investigación</h1>
+                <p>Generación de títulos de investigación</p>
+                <span class="header-badge">Escuela de Administración &mdash; UNASAM</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <nav class="steps-nav" aria-label="Pasos">
+            <button type="button" class="step-tab active" data-step="1" onclick="irAlPaso(1)">
+                <span class="step-number"><span class="step-check">1</span></span>
+                <span class="step-label">Marco<span class="step-sub">Metodológico</span></span>
+            </button>
+            <button type="button" class="step-tab" data-step="2" onclick="irAlPaso(2)">
+                <span class="step-number"><span class="step-check">2</span></span>
+                <span class="step-label">Variables<span class="step-sub">y Dimensiones</span></span>
+            </button>
+            <button type="button" class="step-tab" data-step="3" onclick="irAlPaso(3)">
+                <span class="step-number"><span class="step-check">3</span></span>
+                <span class="step-label">Específicas<span class="step-sub">Cantidad</span></span>
+            </button>
+            <button type="button" class="step-tab" data-step="4" onclick="irAlPaso(4)">
+                <span class="step-number"><span class="step-check">4</span></span>
+                <span class="step-label">Contexto<span class="step-sub">Investigación</span></span>
+            </button>
+        </nav>
+
+        <!-- PASO 1 -->
+        <section class="step-panel active" id="paso1">
+            <div class="section-title">
+                <span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg></span>
+                <span>1. Marco Metodológico y Enfoque</span>
+            </div>
+
+            <div class="grid-row">
+                <label for="enfoqueMetodologico">Enfoque Metodológico:</label>
+                <select id="enfoqueMetodologico" onchange="adaptarInterfazEnfoque()">
+                    <option value="cuantitativo">Cuantitativo</option>
+                    <option value="cualitativo">Cualitativo</option>
+                    <option value="mixto">Mixto</option>
+                </select>
+            </div>
+
+            <div class="grid-row">
+                <label for="autorMetodologia">Autor de Referencia:</label>
+                <select id="autorMetodologia">
+                    <option value="varahorna">Arístides Vara Horna</option>
+                    <option value="villanueva">Luis Villanueva</option>
+                    <option value="sampieri">Hernández Sampieri</option>
+                    <option value="bernal">César Augusto Bernal Torres</option>
+                </select>
+            </div>
+
+            <div class="grid-row">
+                <label for="tipoInvestigacion">Tipo / Nivel de Investigación:</label>
+                <select id="tipoInvestigacion" onchange="actualizarConectores()">
+                    <option value="correlacional">Correlacional</option>
+                    <option value="descriptivo_simple">Descriptivo simple</option>
+                    <option value="descriptivo_asociativo">Descriptivo-asociativo</option>
+                    <option value="explicativo">Explicativo</option>
+                </select>
+            </div>
+
+            <div class="grid-row">
+                <label for="conectorVariables">Conector Principal (Título):</label>
+                <select id="conectorVariables">
+                    <!-- Se llena dinámicamente -->
+                </select>
+            </div>
+
+            <div class="grid-row">
+                <label for="tipoVariables">Tipo por Variables:</label>
+                <select id="tipoVariables" onchange="adaptarTipoVariables()">
+                    <option value="bivariada">Bivariada (2 variables)</option>
+                    <option value="multivariada">Multivariada (3 o más variables)</option>
+                </select>
+            </div>
+
+            <div class="step-actions">
+                <span class="btn-spacer"></span>
+                <button type="button" class="btn-nav btn-next" onclick="siguientePaso()">Siguiente &rarr;</button>
+            </div>
+        </section>
+
+        <!-- PASO 2 -->
+        <section class="step-panel" id="paso2">
+            <div class="section-title">
+                <span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM7.5 18h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V8h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V8h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V8h2v2z"/></svg></span>
+                <span id="tituloSeccionVars">2. Variables y Dimensiones</span>
+            </div>
+
+            <div class="grid-row">
+                <label for="v1" id="labelV1">Variable 1:</label>
+                <input type="text" id="v1" placeholder="Ej: Clima organizacional">
+            </div>
+            <div class="grid-row">
+                <label id="labelDimV1">Dimensiones V1:</label>
+                <div class="dim-container" id="containerDimV1">
+                    <div class="dim-item">
+                        <input type="text" class="dim-v1-input" placeholder="Dimensión 1 de V1">
+                    </div>
+                </div>
+            </div>
+            <div class="grid-row">
+                <div></div>
+                <button type="button" class="btn-add" id="btnAddV1" onclick="agregarDimension('containerDimV1', 'dim-v1-input', 'Dimensión de V1')">+ Agregar Dimensión V1</button>
+            </div>
+
+            <div class="grid-row" style="margin-top: 15px;">
+                <label for="v2" id="labelV2">Variable 2:</label>
+                <input type="text" id="v2" placeholder="Ej: desempeño laboral">
+            </div>
+            <div class="grid-row">
+                <label id="labelDimV2">Dimensiones V2:</label>
+                <div class="dim-container" id="containerDimV2">
+                    <div class="dim-item">
+                        <input type="text" class="dim-v2-input" placeholder="Dimensión 1 de V2">
+                    </div>
+                </div>
+            </div>
+            <div class="grid-row">
+                <div></div>
+                <button type="button" class="btn-add" id="btnAddV2" onclick="agregarDimension('containerDimV2', 'dim-v2-input', 'Dimensión de V2')">+ Agregar Dimensión V2</button>
+            </div>
+
+            <div id="bloqueV3" style="display:none;">
+                <div class="grid-row">
+                    <label for="v3" id="labelV3">Variable 3:</label>
+                    <input type="text" id="v3" placeholder="Ej: Satisfacción laboral">
+                </div>
+                <div class="grid-row">
+                    <label id="labelDimV3">Dimensiones V3:</label>
+                    <div class="dim-container" id="containerDimV3">
+                        <div class="dim-item">
+                            <input type="text" class="dim-v3-input" placeholder="Dimensión 1 de V3">
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-row">
+                    <div></div>
+                    <button type="button" class="btn-add" id="btnAddV3" onclick="agregarDimension('containerDimV3', 'dim-v3-input', 'Dimensión de V3')">+ Agregar Dimensión V3</button>
+                </div>
+            </div>
+
+            <div id="containerVarsExtra"></div>
+
+            <div id="bloqueAddVarExtra" style="display:none;">
+                <div class="grid-row">
+                    <div></div>
+                    <button type="button" class="btn-add" onclick="agregarVariableExtra()">+ Agregar Variable (Multivariada)</button>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button type="button" class="btn-nav btn-prev" onclick="anteriorPaso()">&larr; Anterior</button>
+                <button type="button" class="btn-nav btn-next" onclick="siguientePaso()">Siguiente &rarr;</button>
+            </div>
+        </section>
+
+        <!-- PASO 3 -->
+        <section class="step-panel" id="paso3">
+            <div class="section-title">
+                <span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 0h14V7H7v2zm0 4h14v-2H7v2zm0 4h14v-2H7v2z"/></svg></span>
+                <span>3. Cantidad de Elementos Específicos</span>
+            </div>
+
+            <div class="grid-row">
+                <label for="cantEspecificas">Cantidad de elementos específicos a generar:</label>
+                <input type="number" id="cantEspecificas" min="1" max="10" value="3" placeholder="Ej: 3">
+            </div>
+
+            <div class="step-actions">
+                <button type="button" class="btn-nav btn-prev" onclick="anteriorPaso()">&larr; Anterior</button>
+                <button type="button" class="btn-nav btn-next" onclick="siguientePaso()">Siguiente &rarr;</button>
+            </div>
+        </section>
+
+        <!-- PASO 4 -->
+        <section class="step-panel" id="paso4">
+            <div class="section-title">
+                <span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span>
+                <span>4. Contexto de la Investigación</span>
+            </div>
+
+            <div class="grid-row">
+                <label for="poblacion">Población / Participantes:</label>
+                <input type="text" id="poblacion" placeholder="Ej: Estudiantes / Trabajadores">
+            </div>
+
+            <div class="grid-row">
+                <label for="organizacion">Organización / Empresa:</label>
+                <input type="text" id="organizacion" placeholder="Ej: Universidad Nacional">
+            </div>
+
+            <div class="grid-row">
+                <label for="lugar">Lugar:</label>
+                <input type="text" id="lugar" placeholder="Ej: Lima">
+            </div>
+
+            <div class="grid-row">
+                <label for="anio">Año:</label>
+                <input type="number" id="anio" placeholder="Ej: 2026">
+            </div>
+
+            <div class="step-actions">
+                <button type="button" class="btn-nav btn-prev" onclick="anteriorPaso()">&larr; Anterior</button>
+                <span class="btn-spacer"></span>
+            </div>
+
+            <button type="button" class="btn-main" onclick="generarProyecto()">Tituladora de Proyectos</button>
+        </section>
+
+        <div class="validation-box" id="boxValidacion"></div>
+
+        <div class="result" id="resultado">
+            Completa los datos para generar el título sugerido y la matriz de consistencia.
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <p><strong>Escuela de Administración &mdash; Universidad Nacional Santiago Ant&uacute;nez de Mayolo (UNASAM)</strong><br>
+        Construye títulos de investigación correlacionales, descriptivos y explicativos para estudios bivariados y multivariados. Cr&eacute;ditos: Escuela de Administraci&oacute;n &mdash; UNASAM.</p>
+    </footer>
+
+    <script>
+        const modoApp = document.documentElement.dataset.modo || 'tituladora';
+        function adaptarInterfazEnfoque() {
+            const enfoque = document.getElementById('enfoqueMetodologico').value;
+            const tituloSeccionVars = document.getElementById('tituloSeccionVars');
+            const labelV1 = document.getElementById('labelV1');
+            const labelV2 = document.getElementById('labelV2');
+            const labelDimV1 = document.getElementById('labelDimV1');
+            const labelDimV2 = document.getElementById('labelDimV2');
+            const btnAddV1 = document.getElementById('btnAddV1');
+            const btnAddV2 = document.getElementById('btnAddV2');
+
+            if (enfoque === 'cualitativo') {
+                tituloSeccionVars.textContent = '2. Categorías y Subcategorías';
+                labelV1.textContent = 'Categoría 1:';
+                labelV2.textContent = 'Categoría 2:';
+                labelDimV1.textContent = 'Subcategorías C1:';
+                labelDimV2.textContent = 'Subcategorías C2:';
+                btnAddV1.textContent = '+ Agregar Subcategoría C1';
+                btnAddV2.textContent = '+ Agregar Subcategoría C2';
+            } else if (enfoque === 'mixto') {
+                tituloSeccionVars.textContent = '2. Variables / Categorías (Enfoque Mixto)';
+                labelV1.textContent = 'Variable/Categoría 1:';
+                labelV2.textContent = 'Variable/Categoría 2:';
+                labelDimV1.textContent = 'Dimensiones/Subcat C1:';
+                labelDimV2.textContent = 'Dimensiones/Subcat C2:';
+                btnAddV1.textContent = '+ Agregar Dim/Subcat 1';
+                btnAddV2.textContent = '+ Agregar Dim/Subcat 2';
+            } else {
+                tituloSeccionVars.textContent = '2. Variables y Dimensiones';
+                labelV1.textContent = 'Variable 1:';
+                labelV2.textContent = 'Variable 2:';
+                labelDimV1.textContent = 'Dimensiones V1:';
+                labelDimV2.textContent = 'Dimensiones V2:';
+                btnAddV1.textContent = '+ Agregar Dimensión V1';
+                btnAddV2.textContent = '+ Agregar Dimensión V2';
+            }
+            var labelV3 = document.getElementById('labelV3');
+            var labelDimV3 = document.getElementById('labelDimV3');
+            var btnAddV3 = document.getElementById('btnAddV3');
+            if(labelV3){
+                if(enfoque === 'cualitativo'){ labelV3.textContent='Categoría 3:'; if(labelDimV3) labelDimV3.textContent='Subcategorías C3:'; if(btnAddV3) btnAddV3.textContent='+ Agregar Subcategoría C3'; }
+                else if(enfoque === 'mixto'){ labelV3.textContent='Variable/Categoría 3:'; if(labelDimV3) labelDimV3.textContent='Dimensiones/Subcat C3:'; if(btnAddV3) btnAddV3.textContent='+ Agregar Dim/Subcat 3'; }
+                else { labelV3.textContent='Variable 3:'; if(labelDimV3) labelDimV3.textContent='Dimensiones V3:'; if(btnAddV3) btnAddV3.textContent='+ Agregar Dimensión V3'; }
+            }
+        }
+
+        function actualizarConectores() {
+            const tipo = document.getElementById('tipoInvestigacion').value;
+            const selectConector = document.getElementById('conectorVariables');
+            selectConector.innerHTML = ""; 
+
+            let opciones = [];
+            if (tipo === "correlacional") {
+                opciones = ["y", "y su relación con", "asociado a"];
+            } else if (tipo === "descriptivo_asociativo") {
+                opciones = ["y su asociación con", "y en relación con"];
+            } else if (tipo === "descriptivo_simple") {
+                opciones = ["y"];
+            } else if (tipo === "explicativo") {
+                opciones = ["y su influencia en", "y su incidencia en", "y su impacto en"];
+            }
+
+            opciones.forEach(op => {
+                let opt = document.createElement('option');
+                opt.value = op;
+                opt.textContent = op;
+                selectConector.appendChild(opt);
+            });
+        }
+
+        function agregarDimension(containerId, inputClass, placeholderText) {
+            const container = document.getElementById(containerId);
+            const numDim = container.children.length + 1;
+            const div = document.createElement('div');
+            div.className = 'dim-item';
+            div.innerHTML = `
+                <input type="text" class="${inputClass}" placeholder="${placeholderText} ${numDim}">
+                <button class="btn-remove" onclick="eliminarDimension(this)">-</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function eliminarDimension(button) {
+            button.parentElement.remove();
+        }
+
+        window.onload = function() {
+            actualizarConectores();
+            adaptarInterfazEnfoque();
+        };
+
+        function esFemenino(texto) {
+            const limpio = texto.trim().toLowerCase();
+            return limpio.endsWith('a') || limpio.endsWith('as');
+        }
+
+        function obtenerValoresDimensiones(inputClass) {
+            const inputs = document.querySelectorAll('.' + inputClass);
+            let lista = [];
+            inputs.forEach(inp => {
+                const val = inp.value.trim();
+                if (val !== "") lista.push(val);
+            });
+            return lista;
+        }
+
+        function validarInsumos(v1, v2, dims1, dims2, cantEspecificas, enfoque) {
+            const box = document.getElementById('boxValidacion');
+            let msgs = [];
+
+            if (dims1.length === 0 || dims2.length === 0) {
+                msgs.push("⚠️ Se sugiere agregar al menos una dimensión/subcategoría por variable para construir adecuadamente las preguntas específicas.");
+            }
+            if (dims1.length !== dims2.length && dims1.length > 0 && dims2.length > 0) {
+                msgs.push("ℹ️ El número de dimensiones de V1 y V2 es desigual. El sistema reocupará secuencialmente los elementos.");
+            }
+            if (cantEspecificas > (dims1.length + dims2.length) && dims1.length > 0) {
+                msgs.push("ℹ️ Has solicitado más específicas que dimensiones ingresadas. Se usará un patrón iterativo de cruce.");
+            }
+
+            if (msgs.length > 0) {
+                box.className = "validation-box validation-warning";
+                box.innerHTML = "<b>Revisión Metodológica:</b><br>" + msgs.join("<br>");
+                box.style.display = "block";
+            } else {
+                box.className = "validation-box validation-success";
+                box.innerHTML = "<b>✓ Validación Correcta:</b> Todos los componentes presentan coherencia interna y estructural para el enfoque " + enfoque + ".";
+                box.style.display = "block";
+            }
+        }
+
+        function generarProyecto() {
+            const enfoque = document.getElementById('enfoqueMetodologico').value;
+            const autor = document.getElementById('autorMetodologia').value;
+            const tipo = document.getElementById('tipoInvestigacion').value;
+            const v1 = document.getElementById('v1').value.trim();
+            let v2 = document.getElementById('v2').value.trim();
+            const poblacion = document.getElementById('poblacion').value.trim();
+            const organizacion = document.getElementById('organizacion').value.trim();
+            const lugar = document.getElementById('lugar').value.trim();
+            const anio = document.getElementById('anio').value.trim();
+            let conectorElegido = document.getElementById('conectorVariables').value;
+            const cantEspecificas = parseInt(document.getElementById('cantEspecificas').value) || 1;
+            const tipoVariables = document.getElementById('tipoVariables') ? document.getElementById('tipoVariables').value : 'bivariada';
+            const esMultivariada = tipoVariables === 'multivariada';
+            let variablesExtra = [];
+            if (esMultivariada) {
+                const v3val = document.getElementById('v3') ? document.getElementById('v3').value.trim() : '';
+                if (v3val) variablesExtra.push(v3val);
+                document.querySelectorAll('.var-extra-input').forEach(inp => { const val = inp.value.trim(); if(val) variablesExtra.push(val); });
+            }
+
+            const resultadoDiv = document.getElementById('resultado');
+
+            if (!v1 || !v2 || !poblacion || !organizacion || !lugar || !anio) {
+                resultadoDiv.innerHTML = "<span style='color: #b02a63; font-weight: bold;'>Por favor, completa los campos principales (Variables/Categorías, Población, Organización, Lugar y Año).</span>";
+                return;
+            }
+
+            const dimensiones1 = obtenerValoresDimensiones('dim-v1-input');
+            const dimensiones2 = obtenerValoresDimensiones('dim-v2-input');
+            let dimensionesExtra = [];
+            if (esMultivariada) {
+                if (variablesExtra.length === 0) {
+                    resultadoDiv.innerHTML = "<span style='color: #0F2A44; font-weight: bold;'>En modo Multivariada, completa al menos la Variable 3 (además de Variable 1 y 2).</span>";
+                    return;
+                }
+                const d3 = obtenerValoresDimensiones('dim-v3-input');
+                dimensionesExtra.push(d3);
+                document.querySelectorAll('[id^="containerDimExtra"]').forEach(cont => {
+                    const inputs = cont.querySelectorAll('input');
+                    let lista = [];
+                    inputs.forEach(inp => { const val = inp.value.trim(); if(val) lista.push(val); });
+                    dimensionesExtra.push(lista);
+                });
+            }
+
+            validarInsumos(v1, v2, dimensiones1, dimensiones2, cantEspecificas, enfoque);
+
+            // Formato Variable 2
+            v2 = v2.charAt(0).toLowerCase() + v2.slice(1);
+            if (conectorElegido === "y") {
+                const v2Minus = v2.toLowerCase();
+                if (v2Minus.startsWith('i') || v2Minus.startsWith('hi')) {
+                    conectorElegido = "e";
+                }
+            }
+
+            // Artículos automáticos
+            const artV1 = esFemenino(v1) ? "La" : "El";
+            const artV2 = esFemenino(v2) ? "la" : "el";
+            const conectorPob = esFemenino(poblacion) ? "en las" : "en los";
+            const conectorOrg = esFemenino(organizacion) ? "de la" : "del";
+
+            // Título
+            const bloqueVariables = `${artV1} ${v1} ${conectorElegido} ${artV2} ${v2}`;
+            let tituloFinal = `${bloqueVariables} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion} en ${lugar}, ${anio}`;
+            tituloFinal = tituloFinal.charAt(0).toUpperCase() + tituloFinal.slice(1);
+            let todasVariables = [v1, v2, ...variablesExtra];
+            let todosArticulos = todasVariables.map(v => esFemenino(v) ? "La" : "El");
+            if (esMultivariada && variablesExtra.length > 0) {
+                let bloqueMulti = todasVariables.map((v,i)=> `${todosArticulos[i]} ${v}`).join(', ');
+                bloqueMulti = bloqueMulti.replace(/, ([^,]+)$/, ' y $1');
+                tituloFinal = `${bloqueMulti} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion} en ${lugar}, ${anio}`;
+                tituloFinal = tituloFinal.charAt(0).toUpperCase() + tituloFinal.slice(1);
+            }
+
+            // El título del proyecto refleja el nivel elegido y se distingue entre descripción simple y asociativa.
+            if (tipo === "descriptivo_simple") {
+                let varsTituloDesc = todasVariables.join(' y ');
+                tituloFinal = `Descripción de ${varsTituloDesc} en ${poblacion} de ${organizacion}, ${lugar}, ${anio}`;
+            } else if (tipo === "descriptivo_asociativo") {
+                let varsTituloAsoc = todasVariables.join(', ').replace(/, ([^,]+)$/, ' y $1');
+                tituloFinal = `Descripción y asociación entre ${varsTituloAsoc} en ${poblacion} de ${organizacion}, ${lugar}, ${anio}`;
+            }
+
+            // VARIABLES ESTRUCTURALES SEGÚN AUTOR Y ENFOQUE
+            let textoPreguntaGeneral = "";
+            let textoObjetivoGeneral = "";
+            let textoHipotesisGeneral = "";
+            let listaPreguntasEsp = [];
+            let listaObjetivosEsp = [];
+            let listaHipotesisEsp = [];
+
+            if (autor === "varahorna") {
+                if (enfoque === "cualitativo") {
+                    textoPreguntaGeneral = `¿Cómo se manifiestan y comprenden la categoría ${v1} y la categoría ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}?`;
+                    textoObjetivoGeneral = `Comprender e interpretar la categoría ${v1} y la categoría ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                    textoHipotesisGeneral = `Supuesto teórico: La categoría ${v1} se articula cualitativamente con la dinámica de ${v2} en las vivencias de ${conectorPob} ${poblacion}.`;
+                } else if (tipo === "correlacional") {
+                    textoPreguntaGeneral = `¿De qué manera ${artV1.toLowerCase()} ${v1} se relaciona con ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}?`;
+                    textoObjetivoGeneral = `Determinar el grado de relación entre ${artV1.toLowerCase()} ${v1} y ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                    textoHipotesisGeneral = `Existe una relación directa y significativa entre ${artV1.toLowerCase()} ${v1} y ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                } else {
+                    textoPreguntaGeneral = `¿De qué manera influye ${artV1.toLowerCase()} ${v1} en ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}?`;
+                    textoObjetivoGeneral = `Demostrar el impacto explicativo de ${artV1.toLowerCase()} ${v1} sobre ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                    textoHipotesisGeneral = `${artV1} ${v1} influye de manera significativa y directa en ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                }
+            } else if (autor === "sampieri") {
+                if (enfoque === "cualitativo") {
+                    textoPreguntaGeneral = `¿Cuáles son los significados y experiencias asociados a ${v1} y ${v2} en ${conectorPob} ${poblacion} de ${organizacion} (${lugar}, ${anio})?`;
+                    textoObjetivoGeneral = `Explorar las experiencias sobre ${v1} y ${v2} en ${conectorPob} ${poblacion} de ${organizacion} (${lugar}, ${anio}).`;
+                    textoHipotesisGeneral = `Proposición cualitativa: Las percepciones de ${v1} reconfiguran el significado asignado a ${v2}.`;
+                } else if (tipo === "correlacional") {
+                    textoPreguntaGeneral = `¿Cuál es la relación que existe entre ${artV1.toLowerCase()} ${v1} y ${artV2} ${v2} en los ${poblacion} de ${organizacion} (${lugar}, ${anio})?`;
+                    textoObjetivoGeneral = `Evaluar la relación entre ${artV1.toLowerCase()} ${v1} y ${artV2} ${v2} en los ${poblacion} de ${organizacion} (${lugar}, ${anio}).`;
+                    textoHipotesisGeneral = `A mayor nivel de ${v1}, mayor será el nivel de ${v2} en los ${poblacion} de ${organizacion}.`;
+                } else {
+                    textoPreguntaGeneral = `¿De qué modo ${artV1.toLowerCase()} ${v1} determina el comportamiento de ${artV2} ${v2} en los ${poblacion} de ${organizacion} (${lugar}, ${anio})?`;
+                    textoObjetivoGeneral = `Explicar el efecto de ${artV1.toLowerCase()} ${v1} en ${artV2} ${v2} en los ${poblacion} de ${organizacion} (${lugar}, ${anio}).`;
+                    textoHipotesisGeneral = `${artV1} ${v1} produce un efecto directo sobre el incremento/decremento de ${artV2} ${v2} en los ${poblacion}.`;
+                }
+            } else if (autor === "bernal") {
+                if (enfoque === "cualitativo") {
+                    textoPreguntaGeneral = `¿Cómo se interpretan y significan las categorías ${v1} y ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}?`;
+                    textoObjetivoGeneral = `Interpretar las categorías ${v1} y ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                    textoHipotesisGeneral = `Supuesto: Las categorías ${v1} y ${v2} se construyen socialmente en la experiencia de ${conectorPob} ${poblacion}.`;
+                } else if (tipo === "correlacional") {
+                    textoPreguntaGeneral = `¿Cuál es la relación entre ${artV1.toLowerCase()} ${v1} y ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}?`;
+                    textoObjetivoGeneral = `Establecer la relación entre ${artV1.toLowerCase()} ${v1} y ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                    textoHipotesisGeneral = `Existe relación significativa entre ${artV1.toLowerCase()} ${v1} y ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                } else {
+                    textoPreguntaGeneral = `¿En qué medida ${artV1.toLowerCase()} ${v1} explica ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}?`;
+                    textoObjetivoGeneral = `Explicar ${artV2} ${v2} a partir de ${artV1.toLowerCase()} ${v1} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                    textoHipotesisGeneral = `${artV1} ${v1} explica significativamente ${artV2} ${v2} ${conectorPob} ${poblacion}.`;
+                }
+            } else { // Villanueva
+                if (enfoque === "cualitativo") {
+                    textoPreguntaGeneral = `¿De qué modo se interpretan la categoría ${v1} y la categoría ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar} - ${anio}?`;
+                    textoObjetivoGeneral = `Analizar cualitativamente la categoría ${v1} y la categoría ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar} - ${anio}.`;
+                    textoHipotesisGeneral = `Supuesto cualitativo: Los patrones conceptuales de ${v1} convergen con la interpretación de ${v2}.`;
+                } else if (tipo === "correlacional") {
+                    textoPreguntaGeneral = `¿En qué medida se vincula ${artV1.toLowerCase()} ${v1} con ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar} - ${anio}?`;
+                    textoObjetivoGeneral = `Establecer la asociación entre ${artV1.toLowerCase()} ${v1} y ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar} - ${anio}.`;
+                    textoHipotesisGeneral = `${artV1} ${v1} se asocia de forma directa con ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar} - ${anio}.`;
+                } else {
+                    textoPreguntaGeneral = `¿En qué medida la presencia de ${artV1.toLowerCase()} ${v1} genera cambios en ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar} - ${anio}?`;
+                    textoObjetivoGeneral = `Comprobar la incidencia de ${artV1.toLowerCase()} ${v1} en ${artV2} ${v2} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar} - ${anio}.`;
+                    textoHipotesisGeneral = `La variabilidad de ${artV2} ${v2} es explicada por la influencia de ${artV1.toLowerCase()} ${v1} ${conectorPob} ${poblacion}.`;
+                }
+            }
+
+            if (esMultivariada && variablesExtra.length > 0) {
+                let listaVarsTexto = todasVariables.join(', ');
+                listaVarsTexto = listaVarsTexto.replace(/, ([^,]+)$/, ' y $1');
+                if (enfoque === "cualitativo") {
+                    textoPreguntaGeneral = `¿Cómo se comprenden y manifiestan las categorías ${listaVarsTexto} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}?`;
+                    textoObjetivoGeneral = `Comprender e interpretar las categorías ${listaVarsTexto} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                    textoHipotesisGeneral = `Supuesto: Las categorías ${listaVarsTexto} se articulan cualitativamente en la experiencia de ${conectorPob} ${poblacion}.`;
+                } else if (tipo === "correlacional") {
+                    textoPreguntaGeneral = `¿De qué manera se relacionan ${listaVarsTexto} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}?`;
+                    textoObjetivoGeneral = `Determinar la relación entre ${listaVarsTexto} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                    textoHipotesisGeneral = `Existe una relación directa y significativa entre ${listaVarsTexto} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                } else {
+                    textoPreguntaGeneral = `¿De qué manera ${v1} influye en ${variablesExtra.join(' y ')} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}?`;
+                    textoObjetivoGeneral = `Demostrar la influencia de ${v1} en ${variablesExtra.join(' y ')} ${conectorPob} ${poblacion} ${conectorOrg} ${organizacion}, ${lugar}, ${anio}.`;
+                    textoHipotesisGeneral = `${artV1} ${v1} influye de manera significativa en ${variablesExtra.join(' y ')} ${conectorPob} ${poblacion}.`;
+                }
+            }
+
+            // Construcción de listas específicas
+            for (let i = 0; i < cantEspecificas; i++) {
+                let d1 = dimensiones1[i % (dimensiones1.length || 1)] || `Dimensión/Subcategoría ${i + 1}`;
+                let d2 = dimensiones2[i % (dimensiones2.length || 1)] || `Dimensión/Subcategoría ${i + 1}`;
+
+                if (enfoque === "cualitativo") {
+                    listaPreguntasEsp.push(`¿Cómo se caracteriza y experimenta la subcategoría ${d1} frente a ${d2} ${conectorPob} ${poblacion}?`);
+                    listaObjetivosEsp.push(`Describir e interpretar la subcategoría ${d1} en relación con ${d2} ${conectorPob} ${poblacion}.`);
+                    listaHipotesisEsp.push(`Supuesto específico ${i+1}: La subcategoría ${d1} condiciona la percepción cualitativa de ${d2}.`);
+                } else if (tipo === "correlacional") {
+                    listaPreguntasEsp.push(`¿De qué manera la dimensión ${d1} se relaciona con la dimensión ${d2} ${conectorPob} ${poblacion}?`);
+                    listaObjetivosEsp.push(`Determinar la relación específica entre la dimensión ${d1} y la dimensión ${d2} ${conectorPob} ${poblacion}.`);
+                    listaHipotesisEsp.push(`La dimensión ${d1} se relaciona significativamente con la dimensión ${d2} ${conectorPob} ${poblacion}.`);
+                } else {
+                    listaPreguntasEsp.push(`¿De qué manera la dimensión ${d1} influye en la dimensión ${d2} ${conectorPob} ${poblacion}?`);
+                    listaObjetivosEsp.push(`Demostrar la influencia específica de la dimensión ${d1} sobre la dimensión ${d2} ${conectorPob} ${poblacion}.`);
+                    listaHipotesisEsp.push(`La dimensión ${d1} influye significativamente en la dimensión ${d2} ${conectorPob} ${poblacion}.`);
+                }
+            }
+
+            if (esMultivariada && variablesExtra.length > 0) {
+                listaPreguntasEsp = []; listaObjetivosEsp = []; listaHipotesisEsp = [];
+                let gruposDims = [dimensiones1, dimensiones2, ...dimensionesExtra];
+                let nombresVars = todasVariables;
+                for (let i = 0; i < cantEspecificas; i++) {
+                    let idxA = i % nombresVars.length;
+                    let idxB = (i + 1) % nombresVars.length;
+                    let dA = (gruposDims[idxA] && gruposDims[idxA][i % (gruposDims[idxA].length || 1)]) || `Dimensión/Subcategoría ${i + 1}`;
+                    let dB = (gruposDims[idxB] && gruposDims[idxB][i % (gruposDims[idxB].length || 1)]) || `Dimensión/Subcategoría ${i + 1}`;
+                    if (enfoque === "cualitativo") {
+                        listaPreguntasEsp.push(`¿Cómo se caracteriza la subcategoría ${dA} (${nombresVars[idxA]}) frente a ${dB} (${nombresVars[idxB]}) ${conectorPob} ${poblacion}?`);
+                        listaObjetivosEsp.push(`Describir la subcategoría ${dA} (${nombresVars[idxA]}) en relación con ${dB} (${nombresVars[idxB]}) ${conectorPob} ${poblacion}.`);
+                        listaHipotesisEsp.push(`Supuesto específico ${i+1}: La subcategoría ${dA} condiciona la percepción de ${dB}.`);
+                    } else if (tipo === "correlacional") {
+                        listaPreguntasEsp.push(`¿De qué manera la dimensión ${dA} (${nombresVars[idxA]}) se relaciona con la dimensión ${dB} (${nombresVars[idxB]}) ${conectorPob} ${poblacion}?`);
+                        listaObjetivosEsp.push(`Determinar la relación entre la dimensión ${dA} (${nombresVars[idxA]}) y la dimensión ${dB} (${nombresVars[idxB]}) ${conectorPob} ${poblacion}.`);
+                        listaHipotesisEsp.push(`La dimensión ${dA} se relaciona significativamente con la dimensión ${dB} ${conectorPob} ${poblacion}.`);
+                    } else {
+                        listaPreguntasEsp.push(`¿De qué manera la dimensión ${dA} (${nombresVars[idxA]}) influye en la dimensión ${dB} (${nombresVars[idxB]}) ${conectorPob} ${poblacion}?`);
+                        listaObjetivosEsp.push(`Demostrar la influencia de la dimensión ${dA} (${nombresVars[idxA]}) sobre la dimensión ${dB} (${nombresVars[idxB]}) ${conectorPob} ${poblacion}.`);
+                        listaHipotesisEsp.push(`La dimensión ${dA} influye significativamente en la dimensión ${dB} ${conectorPob} ${poblacion}.`);
+                    }
+                }
+            }
+
+
+            // Redacción diferenciada para niveles descriptivos: simples o asociativos.
+            if (tipo === "descriptivo_simple" || tipo === "descriptivo_asociativo") {
+                const varsDesc = todasVariables;
+                const esSimple = tipo === "descriptivo_simple";
+                const sujeto = poblacion + " " + conectorOrg + " " + organizacion + ", " + lugar + ", " + anio;
+                if (esSimple) {
+                    textoPreguntaGeneral = `¿Cuál es el nivel o estado de ${varsDesc.join(' y ')} en ${sujeto}?`;
+                    textoObjetivoGeneral = `Describir el nivel o estado de ${varsDesc.join(' y ')} en ${sujeto}.`;
+                    textoHipotesisGeneral = `No se plantea hipótesis de investigación para el nivel descriptivo simple; se describirán las variables observadas.`;
+                } else {
+                    let varsAsoc = varsDesc.join(', ').replace(/, ([^,]+)$/, ' y $1');
+                    textoPreguntaGeneral = `¿Qué asociación se observa entre ${varsAsoc} en ${sujeto}?`;
+                    textoObjetivoGeneral = `Describir la asociación entre ${varsAsoc} en ${sujeto}.`;
+                    textoHipotesisGeneral = `Existe asociación entre ${varsAsoc} en ${sujeto}.`;
+                }
+                listaPreguntasEsp = []; listaObjetivosEsp = []; listaHipotesisEsp = [];
+                const gruposDesc = [dimensiones1, dimensiones2, ...dimensionesExtra];
+                for (let i = 0; i < cantEspecificas; i++) {
+                    if (esSimple) {
+                        const vi = i % varsDesc.length;
+                        const dims = gruposDesc[vi] || [];
+                        const d = dims.length ? dims[Math.floor(i / varsDesc.length) % dims.length] : '';
+                        const detalle = d ? ` la dimensión ${d} de` : '';
+                        listaPreguntasEsp.push(`¿Cuál es el nivel o estado de${detalle} ${varsDesc[vi]} en ${poblacion}?`);
+                        listaObjetivosEsp.push(`Describir el nivel o estado de${detalle} ${varsDesc[vi]} en ${poblacion}.`);
+                        listaHipotesisEsp.push(`No corresponde formular hipótesis específica para la descripción de ${varsDesc[vi]}${d ? ` (${d})` : ''}.`);
+                    } else {
+                        const a = i % varsDesc.length, b = (i + 1) % varsDesc.length;
+                        const da = (gruposDesc[a] || [])[i % ((gruposDesc[a] || []).length || 1)] || '';
+                        const db = (gruposDesc[b] || [])[i % ((gruposDesc[b] || []).length || 1)] || '';
+                        const xa = da ? `dimensión ${da} de ` : '', xb = db ? `dimensión ${db} de ` : '';
+                        listaPreguntasEsp.push(`¿Qué asociación se observa entre ${xa}${varsDesc[a]} y ${xb}${varsDesc[b]} en ${poblacion}?`);
+                        listaObjetivosEsp.push(`Describir la asociación entre ${xa}${varsDesc[a]} y ${xb}${varsDesc[b]} en ${poblacion}.`);
+                        listaHipotesisEsp.push(`Existe asociación entre ${xa}${varsDesc[a]} y ${xb}${varsDesc[b]} en ${poblacion}.`);
+                    }
+                }
+            }
+
+            // Renderizado HTML
+            let htmlPregEsp = "<ul>" + listaPreguntasEsp.map(p => `<li>${p}</li>`).join('') + "</ul>";
+            let htmlObjEsp = "<ul>" + listaObjetivosEsp.map(o => `<li>${o}</li>`).join('') + "</ul>";
+            let htmlHipEsp = "<ul>" + listaHipotesisEsp.map(h => `<li>${h}</li>`).join('') + "</ul>";
+
+            // CONSTRUCCIÓN DE LA TABLA DE MATRIZ DE CONSISTENCIA
+            let filasMatriz = `
+                <tr>
+                    <td><b>General:</b><br>${textoPreguntaGeneral}<br><br><b>Específicos:</b><br>${listaPreguntasEsp.map((p, idx) => `<b>PE${idx+1}:</b> ${p}`).join('<br>')}</td>
+                    <td><b>General:</b><br>${textoObjetivoGeneral}<br><br><b>Específicos:</b><br>${listaObjetivosEsp.map((o, idx) => `<b>OE${idx+1}:</b> ${o}`).join('<br>')}</td>
+                    <td><b>General:</b><br>${textoHipotesisGeneral}<br><br><b>Específicos:</b><br>${listaHipotesisEsp.map((h, idx) => `<b>HE${idx+1}:</b> ${h}`).join('<br>')}</td>
+                    <td><b>V1/C1:</b> ${v1}<br><br><b>V2/C2:</b> ${v2}</td>
+                    <td><b>Dims C1/V1:</b><br>${dimensiones1.length > 0 ? dimensiones1.join(', ') : 'S/D'}<br><br><b>Dims C2/V2:</b><br>${dimensiones2.length > 0 ? dimensiones2.join(', ') : 'S/D'}</td>
+                    <td><b>Nivel:</b> ${tipo === 'correlacional' ? 'Correlacional' : (tipo === 'descriptivo_simple' ? 'Descriptivo simple' : (tipo === 'descriptivo_asociativo' ? 'Descriptivo-asociativo' : 'Explicativo'))}<br><b>Diseño:</b> ${tipo === 'explicativo' ? 'Explicativo / Causal' : 'No experimental'}<br><b>Enfoque:</b> ${enfoque.toUpperCase()}<br><b>Población:</b> ${poblacion}<br><b>Muestra:</b> Probabilística / Intencional</td>
+                </tr>
+            `;
+
+            if (esMultivariada && variablesExtra.length > 0) {
+                let varsHtml = todasVariables.map((v,idx)=>`<b>V${idx+1}/C${idx+1}:</b> ${v}`).join('<br><br>');
+                let gruposDimsAll = [dimensiones1, dimensiones2, ...dimensionesExtra];
+                let dimsHtml = gruposDimsAll.map((g,idx)=>`<b>Dims V${idx+1}:</b> ${(g && g.length>0) ? g.join(', ') : 'S/D'}`).join('<br><br>');
+                filasMatriz = `
+                <tr>
+                    <td><b>General:</b><br>${textoPreguntaGeneral}<br><br><b>Específicos:</b><br>${listaPreguntasEsp.map((p, idx) => `<b>PE${idx+1}:</b> ${p}`).join('<br>')}</td>
+                    <td><b>General:</b><br>${textoObjetivoGeneral}<br><br><b>Específicos:</b><br>${listaObjetivosEsp.map((o, idx) => `<b>OE${idx+1}:</b> ${o}`).join('<br>')}</td>
+                    <td><b>General:</b><br>${textoHipotesisGeneral}<br><br><b>Específicos:</b><br>${listaHipotesisEsp.map((h, idx) => `<b>HE${idx+1}:</b> ${h}`).join('<br>')}</td>
+                    <td>${varsHtml}</td>
+                    <td>${dimsHtml}</td>
+                    <td><b>Nivel:</b> ${tipo === 'correlacional' ? 'Correlacional' : (tipo === 'descriptivo_simple' ? 'Descriptivo simple' : (tipo === 'descriptivo_asociativo' ? 'Descriptivo-asociativo' : 'Explicativo'))}<br><b>Diseño:</b> ${tipo === 'explicativo' ? 'Explicativo / Causal' : 'No experimental'}<br><b>Enfoque:</b> ${enfoque.toUpperCase()}<br><b>Tipo:</b> Multivariada<br><b>Población:</b> ${poblacion}<br><b>Muestra:</b> Probabilística / Intencional</td>
+                </tr>
+            `;
+            }
+
+            let nombreAutorTexto = autor === "varahorna" ? "Arístides Vara Horna" : (autor === "villanueva" ? "Luis Villanueva" : (autor === "bernal" ? "César Augusto Bernal Torres" : "Hernández Sampieri"));
+
+            resultadoDiv.innerHTML = `
+                <div id="contenidoReporte">
+                    <h3>Reporte Metodológico y Matriz de Consistencia</h3>
+                    <p style="text-align:center;"><b>Autor de Referencia:</b> ${nombreAutorTexto} | <b>Enfoque:</b> ${enfoque.toUpperCase()}</p>
+                    
+                    <div class="block-result" id="bloqueTituloReporte">
+                        <h4>1. Título Sugerido de Investigación:</h4>
+                        <p><b>${tituloFinal}</b></p>
+                    </div>
+
+                    <div class="block-result bloqueOPH">
+                        <h4>2. Problemas de Investigación:</h4>
+                        <p><b>Problema General:</b> ${textoPreguntaGeneral}</p>
+                        <p><b>Problemas Específicos:</b></p>
+                        ${htmlPregEsp}
+                    </div>
+
+                    <div class="block-result bloqueOPH">
+                        <h4>3. Objetivos de Investigación:</h4>
+                        <p><b>Objetivo General:</b> ${textoObjetivoGeneral}</p>
+                        <p><b>Objetivos Específicos:</b></p>
+                        ${htmlObjEsp}
+                    </div>
+
+                    <div class="block-result bloqueOPH">
+                        <h4>4. Hipótesis / Supuestos de Investigación:</h4>
+                        <p><b>Hipótesis General:</b> ${textoHipotesisGeneral}</p>
+                        <p><b>Hipótesis Específicas:</b></p>
+                        ${htmlHipEsp}
+                    </div>
+
+                    <div class="block-result">
+                        <h4>5. Tabla: Matriz de Consistencia Técnica</h4>
+                        <table class="matriz-table">
+                            <thead>
+                                <tr>
+                                    <th>Problemas</th>
+                                    <th>Objetivos</th>
+                                    <th>Hipótesis / Supuestos</th>
+                                    <th>Variables / Categorías</th>
+                                    <th>Dimensiones / Subcat.</th>
+                                    <th>Metodología</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${filasMatriz}
+                            </tbody>
+                        </table>
+                    </div>
+                    <p style="text-align:center; font-size:11px; color:#5B6B82; margin-top:18px; border-top:1px solid #CBD5E1; padding-top:10px;">Escuela de Administración &mdash; Universidad Nacional Santiago Antúnez de Mayolo (UNASAM)</p>
+                </div>
+
+                <div class="export-actions">
+                    <button class="btn-export btn-copy" onclick="copiarTexto()">Copiar Texto</button>
+                    <button class="btn-export btn-word" onclick="descargarWord()">Descargar Word</button>
+                    <button class="btn-export btn-pdf" onclick="descargarPDF()">Exportar / Imprimir PDF</button>
+                </div>
+            `;
+            const tituloBloque = document.getElementById('bloqueTituloReporte');
+            if (modoApp === 'tituladora') {
+                document.querySelectorAll('#contenidoReporte .bloqueOPH').forEach(el => el.style.display = 'none');
+            } else if (tituloBloque) {
+                tituloBloque.style.display = 'none';
+            }
+        }
+
+        function copiarTexto() {
+            const contenido = document.getElementById('contenidoReporte').innerText;
+            navigator.clipboard.writeText(contenido).then(() => {
+                alert("¡Matriz y reporte copiados al portapapeles!");
+            });
+        }
+
+        function descargarWord() {
+            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+                "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+                "xmlns='http://www.w3.org/TR/REC-html40'>" +
+                "<head><meta charset='utf-8'><title>Matriz de Consistencia</title></head><body>";
+            const footer = "</body></html>";
+            const sourceHTML = header + document.getElementById("contenidoReporte").innerHTML + footer;
+
+            const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+            const fileDownload = document.createElement("a");
+            document.body.appendChild(fileDownload);
+            fileDownload.href = source;
+            fileDownload.download = 'Matriz_de_Consistencia.doc';
+            fileDownload.click();
+            document.body.removeChild(fileDownload);
+        }
+
+        function descargarPDF() {
+            window.print();
+        }
+    
+    </script>
+    <script>
+        // ===== NAVEGACIÓN POR PASOS (solo forma, no altera la lógica original) =====
+        var pasoActual = 1;
+        function irAlPaso(n){
+            pasoActual = n;
+            document.querySelectorAll('.step-panel').forEach(function(p){ p.classList.remove('active'); });
+            var panel = document.getElementById('paso' + n);
+            if(panel) panel.classList.add('active');
+            document.querySelectorAll('.step-tab').forEach(function(t){
+                var s = parseInt(t.getAttribute('data-step'), 10);
+                t.classList.toggle('active', s === n);
+                t.classList.toggle('completed', s < n);
+                var check = t.querySelector('.step-check');
+                if(check) check.textContent = (s < n) ? '✓' : String(s);
+            });
+            var cont = document.querySelector('.container');
+            if(cont) cont.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+        function siguientePaso(){ if(pasoActual < 4) irAlPaso(pasoActual + 1); }
+        var contadorVarExtra = 4;
+        function adaptarTipoVariables(){
+            var tipo = document.getElementById('tipoVariables').value;
+            var esMulti = tipo === 'multivariada';
+            var bloqueV3 = document.getElementById('bloqueV3');
+            var bloqueAdd = document.getElementById('bloqueAddVarExtra');
+            if(bloqueV3) bloqueV3.style.display = esMulti ? 'block' : 'none';
+            if(bloqueAdd) bloqueAdd.style.display = esMulti ? 'block' : 'none';
+        }
+        function agregarVariableExtra(){
+            var container = document.getElementById('containerVarsExtra');
+            var n = contadorVarExtra++;
+            var div = document.createElement('div');
+            div.className = 'var-extra-block';
+            div.innerHTML = '<div class="grid-row"><label>Variable ' + n + ':</label><input type="text" class="var-extra-input" placeholder="Ej: Variable ' + n + '"></div>' +
+                '<div class="grid-row"><label>Dimensiones V' + n + ':</label><div class="dim-container" id="containerDimExtra' + n + '"><div class="dim-item"><input type="text" class="dim-extra-' + n + '-input" placeholder="Dimensión 1 de V' + n + '"></div></div></div>' +
+                '<div class="grid-row"><div></div><div style="display:flex;gap:8px;flex-wrap:wrap;"><button type="button" class="btn-add" onclick="agregarDimension(\'containerDimExtra' + n + '\', \'dim-extra-' + n + '-input\', \'Dimensión de V' + n + '\')">+ Agregar Dimensión V' + n + '</button><button type="button" class="btn-remove" onclick="eliminarVariableExtra(this)">Quitar Variable ' + n + '</button></div></div>';
+            container.appendChild(div);
+        }
+        function eliminarVariableExtra(button){
+            var block = button.closest('.var-extra-block');
+            if(block) block.remove();
+        }
+        function anteriorPaso(){ if(pasoActual > 1) irAlPaso(pasoActual - 1); }
+        document.addEventListener('DOMContentLoaded', function(){
+            irAlPaso(1);
+            adaptarTipoVariables();
+            var btnMain = document.querySelector('.btn-main');
+            if(btnMain){
+                btnMain.addEventListener('click', function(){
+                    setTimeout(function(){
+                        var r = document.getElementById('resultado');
+                        if(r) r.scrollIntoView({behavior:'smooth', block:'start'});
+                    }, 120);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
